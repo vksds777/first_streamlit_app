@@ -1,6 +1,5 @@
 import streamlit
 import pandas
-import requests
 streamlit.title('My Moms new Healthy Dinner')
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')                
 streamlit.text('🥣 Omega 3 & Blueberry Oatmeal')
@@ -11,7 +10,7 @@ my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.co
 my_fruit_list=my_fruit_list.set_index('Fruit')
 streamlit.multiselect("Pick Some Fruits:",list(my_fruit_list.index),['Apple','Strawberries'])
 streamlit.dataframe(my_fruit_list)
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-streamlit.text(fruityvice_response)
 streamlit.header("Fruityvice Fruit Advice!")
+import requests
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
 streamlit.text(fruityvice_response.jason())
