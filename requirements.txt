@@ -1,1 +1,1 @@
-snowflake-connecter-python
+import snowflake-connector
