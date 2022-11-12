@@ -1,33 +1,24 @@
+from simple_salesforce import Salesforce
 import streamlit
 import pandas
 import requests
-streamlit.title('My Moms new Healthy Dinner')
-streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')                
-streamlit.header("Fruityvice Fruit Advice!")
-streamlit.text('🥣 Omega 3 & Blueberry Oatmeal')
-streamlit.text('🥗 Kale, Spinach & Rocket Smoothie')
-streamlit.text('🐔 Hard-Boiled Free-Range Egg')
-streamlit.text('🥑🍞 Avacado Toast')
-my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
-my_fruit_list=my_fruit_list.set_index('Fruit')
-streamlit.multiselect("Pick Some Fruits:",list(my_fruit_list.index),['Apple','Strawberries'])
-streamlit.dataframe(my_fruit_list)
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-streamlit.write('The user entered ', fruit_choice)
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+fruit_choice)
-fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-streamlit.dataframe(fruityvice_normalized)
-import snowflake.connector
-streamlit.header('Fruit List Contains')
-#my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-#my_cur = my_cnx.cursor()
-#snowflake-related functions
-def get_fruit_load_list():
-    with my_cnx.cursor() as my_cur;
-         my_cur.execute("select * from fruit_load_list")
-         return my_cur.fetchall()
-# add a button to load the fruit
-if streamlit.button('Get fruit load list');
-   my_cnx = snowflake.connector.connect()**streamlit.secrets[snowflake])
-   my_data_rows=get_fruit_load_list()
-   streamlit.dataframe(my_data_rows)
+import csv
+from io import StringIO
+# Sign into Salesforce
+#sf = Salesforce(username='user@company.com',password='password',security_token='token')
+sf = Salesforce(username='vivek.kumar6.response@timesgroup.com',password='Delta@1234',security_token='csTKM8Vx6qQj0HMMYvINMN9S')
+# Set report details
+#sf_org = 'https://company.salesforce.com/'
+#report_id = 'report_id'
+sf_org = 'https://timespulse.lightning.force.com//' #Your Salesforce Instance URL
+report_id = '00O7F00000BBMerUAH' # add report id
+export_params = '?isdtp=p1&export=1&enc=UTF-8&xf=csv'
+# Download report
+sf_report_url = sf_org + report_id + export_params
+response = requests.get(sf_report_url, headers=sf.headers, cookies={'sid': sf.session_id})
+#print(response)
+new_report = response.content.decode('utf-8')
+#new_report = response.content.decode('ISO-8859-1')
+#print (new_report)
+report_df = pd.read_csv(StringIO(new_report))
+#print (report_df)
