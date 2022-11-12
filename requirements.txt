@@ -1,1 +1,3 @@
 snowflake-connector-python
+simple_salesforce
+
